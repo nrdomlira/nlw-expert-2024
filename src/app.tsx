@@ -1,7 +1,19 @@
+import { useEffect, useState } from "react";
 import logo from "./assets/logo-nlw-expert.svg";
+import { NewNoteCard } from "./components/new-note-card";
 import NoteCard from "./components/note-card";
 
 export function App() {
+  const [key, setKey] = useState<string[]>([]);
+  const [len, setLen] = useState(0)
+
+  useEffect(() => {
+    setKey(Object.keys(localStorage));
+    //console.log(Object.keys(localStorage).length)
+    setLen(Object.keys(localStorage).length);
+    console.log(len)
+  }, [len]);
+
   return (
     <div className="mx-auto max-w-6xl my-12 space-y-6">
       <img src={logo} alt="NLW expert logo" className="h-10 w-auto" />
@@ -16,27 +28,13 @@ export function App() {
       <div className="h-px bg-slate-700" />
 
       <div className="grid grid-cols-3 gap-6 auto-rows-[250px]">
-        <div className="rounded-sm bg-slate-700 p-5 space-y-3">
-          <span className="text-sm font-medium leading-6 text-slate-300">
-            Adicionar nota
-          </span>
-          <p className="text-sm leading-6 text-slate-400">
-            Grave uma nota em áudio que será convertida para texto
-            automaticamente.
-          </p>
-        </div>
-       <NoteCard day={1} message="O Drizzle possui um plugin do ESLint para evitar que realizemos updates
-        ou deletes sem where... Para configurar o plugin, é preciso instalar
-        como abaixo:" />
-       <NoteCard day={2} message="O Drizzle possui um plugin do ESLint para evitar que realizemos updates
-        ou deletes sem where... Para configurar o plugin, é preciso instalar
-        como abaixo:" />
-       <NoteCard day={5} message="O Drizzle possui um plugin do ESLint para evitar que realizemos updates
-        ou deletes sem where... Para configurar o plugin, é preciso instalar
-        como abaixo:" />
-       <NoteCard day={12} message="O Drizzle possui um plugin do ESLint para evitar que realizemos updates
-        ou deletes sem where... Para configurar o plugin, é preciso instalar
-        como abaixo:" />
+        <NewNoteCard />
+
+        {key.map((keys) => (
+          <NoteCard key={keys}
+            data={{ date: keys, content: localStorage.getItem(keys) }}
+          />
+        ))}
       </div>
     </div>
   );
